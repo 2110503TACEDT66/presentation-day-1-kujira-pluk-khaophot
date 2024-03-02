@@ -1,6 +1,6 @@
 const express = require('express');
 
-const {getRent, getRents,addRent,updateRent,deleteRent} = require('../controllers/rents');
+const {getRent, getRents,addRent,updateRent,deleteRent, getChart} = require('../controllers/rents');
 
 
 const router = express.Router({mergeParams:true});
