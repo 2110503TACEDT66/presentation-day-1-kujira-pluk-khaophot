@@ -140,7 +140,6 @@ exports.getChart = async (req,res,next) => {
         labels.push(element.name);
         data.push(rents.length);
     });
-    // Wait for all promises to resolve
     await Promise.all(promises);
     //console.log(query);
     //console.log(labels);
