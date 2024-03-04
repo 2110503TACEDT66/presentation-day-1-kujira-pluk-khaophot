@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const CarSchema = new mongoose.Schema({
-    name : {
+    name: {
         type : String,
         require : [true,'Please add a name'],
         unique : true,
@@ -14,6 +14,13 @@ const CarSchema = new mongoose.Schema({
     },
     tel : {
         type :String
+    },
+    car : {
+        type : String,
+        require : [true,`Please add a car's name`],
+        unique : true,
+        trim : true,
+        maxlength:[50,`Car's can not be more than 50 chaeacters`]
     }
 },{
     toJSON: {virtuals:true},

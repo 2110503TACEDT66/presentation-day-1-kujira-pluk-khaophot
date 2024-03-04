@@ -11,19 +11,19 @@ exports.getRents=async(req,res,next)=>{
     if(req.user.role !== 'admin'){
         query=Rent.find({user:req.user.id}).populate({
             path:'car',
-            select:'name address tel'
+            select:'name address tel car'
         });
     } else{ //If you are an admin, you can see all!
         if(req.params.carId){
             console.log(req.params.carId);
             query = Rent.find({car:req.params.carId}).populate({
                 path:'car',
-                select:'name address tel'
+                select:'name address tel car'
             });
         } else {
             query = Rent.find().populate({
                 path:'car',
-                select:'name address tel'
+                select:'name address tel car'
             });
         }
     }
@@ -48,7 +48,7 @@ exports.getRent=async(req,res,next)=>{
     try{
         const rent = await Rent.findById(req.params.id).populate({
             path: 'car',
-            select: 'name address tel'
+            select: 'name address tel car'
         });
         if(!rent){
             return res.status(404).json({success:false, message:`No appointment with the id of ${req.params.id}`});
