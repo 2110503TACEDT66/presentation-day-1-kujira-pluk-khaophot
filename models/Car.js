@@ -6,21 +6,22 @@ const CarSchema = new mongoose.Schema({
         require : [true,'Please add a name'],
         unique : true,
         trim : true,
-        maxlength:[50,'Name can not be more than 50 chaeacters']
+        maxlength:[50,'Name can not be more than 50 characters']
     },
     address:{
         type:String,
-        required :[true,'Pleade add an address']
+        required :[true,'Please add an address']
     },
     tel : {
-        type :String
+        type :String,
+        required :[true, 'Please add a telephone number']
     },
     car : {
         type : String,
-        require : [true,`Please add a car's name`],
+        require : [true,'Please add a car\'s name'],
         unique : true,
         trim : true,
-        maxlength:[50,`Car's can not be more than 50 chaeacters`]
+        maxlength:[50,'Car\'s can not be more than 50 characters']
     }
 },{
     toJSON: {virtuals:true},
