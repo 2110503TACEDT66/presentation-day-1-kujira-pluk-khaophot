@@ -69,6 +69,11 @@ exports.addRent=async(req,res,next)=>{
         if(!car){
             return res.status(404).json({success:false, message:`No car with the id of ${req.params.carId}`});
         }
+        //check is already booked
+        const existingRent = await Rent.findOne({car:req.params.carId, rentDate: req.body.rentDate });
+        if(existingRent) {
+            return res.status(400).json({ success: false, message: `The car with ID ${req.params.carId} is already booked for the specified date.` });
+        }
         //add user Id to req.body
         req.body.user = req.user.id;
         //Check for existed rent
