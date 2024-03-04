@@ -70,10 +70,20 @@ exports.addRent=async(req,res,next)=>{
             return res.status(404).json({success:false, message:`No car with the id of ${req.params.carId}`});
         }
         //check is already booked
-        const existingRent = await Rent.findOne({car:req.params.carId, rentDate: req.body.rentDate });
-        if(existingRent) {
-            return res.status(400).json({ success: false, message: `The car with ID ${req.params.carId} is already booked for the specified date.` });
-        }
+        const requestedDate = new Date(req.body.rentDate);
+        const rentDateOnly = new Date(requestedDate.toISOString().split('T')[0]);
+        const rentNextDateOnly = new Date(rentDateOnly);
+        rentNextDateOnly.setDate(rentNextDateOnly.getDate() + 1);
+       const existingRent = await Rent.find({
+           car: req.params.carId, 
+           rentDate: { 
+               $gte: rentDateOnly,
+               $lt: rentNextDateOnly
+           }
+       });
+       if(existingRent.length>0) {
+           return res.status(400).json({ success: false, message: `The car with ID ${req.params.carId} is already booked for the specified date.` });
+       }
         //add user Id to req.body
         req.body.user = req.user.id;
         //Check for existed rent
@@ -103,13 +113,19 @@ exports.updateRent=async(req,res,next)=>{
             return res.status(401).json({success:false, message:`User ${req.user.id} is not authorized to update this rent`});
         }
         if(req.body.rentDate){
-            const existedRentDate = await Rent.findOne({
-                car:rent.car,
-                date: req.body.rentDate
+            const requestedDate = new Date(req.body.rentDate);
+            const rentDateOnly = new Date(requestedDate.toISOString().split('T')[0]);
+            const rentNextDateOnly = new Date(rentDateOnly);
+            rentNextDateOnly.setDate(rentNextDateOnly.getDate() + 1);
+            const existingRent = await Rent.find({
+                car: rent.car, 
+                rentDate: { 
+                    $gte: rentDateOnly,
+                    $lt: rentNextDateOnly
+                }
             });
-
-            if(existedRentDate){
-                return res.status(400).json({success:false,message: `The car with ID ${rent.car} is already booked for the specified date.`})
+            if(existingRent.length>0) {
+                return res.status(400).json({ success: false, message: `The car with ID ${rent.car} is already booked for the specified date.` });
             }
         }
         rent = await Rent.findByIdAndUpdate(req.params.id,req.body,{
