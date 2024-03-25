@@ -50,6 +50,10 @@ const CarSchema = new mongoose.Schema({
     cargoCapacity: {
         type: Number,
         require: false
+    },
+    picArray: {
+        type: Array,
+        require: false
     }
 },{
     toJSON: {virtuals:true},
