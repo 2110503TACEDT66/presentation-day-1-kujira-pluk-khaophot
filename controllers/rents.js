@@ -11,19 +11,19 @@ exports.getRents=async(req,res,next)=>{
     if(req.user.role !== 'admin'){
         query=Rent.find({user:req.user.id}).populate({
             path:'car',
-            select:'name address tel car'
+            select:'name address tel car picture picArray'
         });
     } else{ //If you are an admin, you can see all!
         if(req.params.carId){
             console.log(req.params.carId);
             query = Rent.find({car:req.params.carId}).populate({
                 path:'car',
-                select:'name address tel car'
+                select:'name address tel car picture picArray'
             });
         } else {
             query = Rent.find().populate({
                 path:'car',
-                select:'name address tel car'
+                select:'name address tel car picture picArray'
             });
         }
     }
